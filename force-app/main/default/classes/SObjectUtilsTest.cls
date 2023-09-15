@@ -467,4 +467,18 @@ public class SObjectUtilsTest{
         Test.stopTest();
     }
 
+    @IsTest
+    static void getFakeId_shouldReturnCorrectLengthIdAndPrefix(){
+        // Having
+        Schema.SObjectType sot = Account.getSObjectType();
+        String expectedPrefix = sot.getDescribe().getKeyPrefix();
+
+        // When
+        String fakeId = SObjectUtils.getFakeId(sot);
+
+        // Then
+        System.assertEquals(15, fakeId.length(), 'Fake Id length should be 15 characters');
+        System.assertEquals(expectedPrefix, fakeId.substring(0, 3), 'Fake Id should start with correct key prefix');
+    }
+
 }

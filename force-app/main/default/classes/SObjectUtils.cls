@@ -203,6 +203,19 @@ public class SObjectUtils{
         }
     }
 
+     /** Method for creating fake Salesforce Ids.
+     *  Usage example:
+     *  Account a = new Account(Id=getFakeId(Account.SObjectType));
+     * @param sot The SObject type, eg. Account.SObjectType or Projekt__c.SObjectType
+     * @return A fake Salesforce Id
+     */
+    public static String getFakeId(Schema.SObjectType sot){
+        Integer randomNumber = Integer.valueof((Math.random() * 9));
+        String result = String.valueOf(randomNumber);
+        return sot.getDescribe().getKeyPrefix() + '0'.repeat(12 - result.length()) + result;
+    }
+
+
     /**
      * QueryRequest
      * Encapsulates the parameters required for a SOQL query.
