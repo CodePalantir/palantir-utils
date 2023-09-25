@@ -203,7 +203,7 @@ public class SObjectUtils{
         }
     }
 
-     /** Method for creating fake Salesforce Ids.
+    /** Method for creating fake Salesforce Ids.
      *  Usage example:
      *  Account a = new Account(Id=getFakeId(Account.SObjectType));
      * @param sot The SObject type, eg. Account.SObjectType or Projekt__c.SObjectType
@@ -214,7 +214,6 @@ public class SObjectUtils{
         String result = String.valueOf(randomNumber);
         return sot.getDescribe().getKeyPrefix() + '0'.repeat(12 - result.length()) + result;
     }
-
 
     /**
      * QueryRequest
@@ -240,7 +239,8 @@ public class SObjectUtils{
         public Integer offset;
         @AuraEnabled
         public List<Id> recordIds;
-
+        @AuraEnabled
+        public Boolean sortNullsLast = true;
         public QueryRequest(){
             this.fields = new List<String>();
             this.filtersIn = new List<Filter>();
@@ -288,6 +288,9 @@ public class SObjectUtils{
             soql += buildWhereClause();
             if (request.orderByField != null && request.orderByDirection != null){
                 soql += ' ORDER BY ' + request.orderByField + ' ' + request.orderByDirection;
+                if (request.sortNullsLast){
+                    soql += ' NULLS LAST';
+                }
             }
             if (request.limitNo != null){
                 soql += ' LIMIT ' + request.limitNo;
